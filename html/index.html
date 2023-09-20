@@ -32,7 +32,7 @@
     var pass = document.getElementById('password').value;
     console.log(email,pass)
     console.log('http://127.0.0.1:4000/signup?email='+email+'&password='+pass)
-    await axios.post('http://127.0.0.1:4000/signup?email='+email+'&password='+pass, {
+    axios.post('http://127.0.0.1:4000/signup?email='+email+'&password='+pass, {
       email:email,
       password: pass
     })
