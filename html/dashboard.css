@@ -35,8 +35,11 @@ body {
     margin: auto;
     align-items: center;
     border-radius: 20px;
+    display: block;
 }
-
+.desc{
+    display: block;
+}
 .container h1 {
     margin: 15px 0;
 }

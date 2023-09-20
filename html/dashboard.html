@@ -19,25 +19,28 @@
         </div>
 
     </div>
-    <div>
+    <!-- <div class="desc">
         under the hood:
             We deployed a programmable smart contract wallet,
             you now interacted with one of the deployed contract counter with your smart conract wallet account.
             The counter got increased.
             Every time you try tho increase the counter, we are depositing 1eth in your smart contract wallet for gas fees(we did not implement dynamic gas, time is short)
             making a tx from your wallet, you observe the count increasing by one & your balance & previousBlance will have a differnce by approx 1eth
-    </div>
+    </div> -->
 </body>
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
     var sca = document.getElementById('sca');
+    window.onload = function(){
     axios.post('http://127.0.0.1:4000/pubkey',{})
   .then((response) => {
     sca.innerHtml = reponse.data
+    console.log()
     }, (error) => {
     console.log(error);
   });
+}
  var btnInc = document.getElementById('inc');
   btnInc.onclick = function(){
     axios.post('http://127.0.0.1:4000/sendapi', {
