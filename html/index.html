@@ -30,15 +30,16 @@
   btnLogin.onclick = function(){
     var email = document.getElementById('email').value;
     var pass = document.getElementById('password').value;
-
-    axios.post('http://127.0.0.1:4000/signup?email='+email+'&password='+pass, {
+    console.log(email,pass)
+    console.log('http://127.0.0.1:4000/signup?email='+email+'&password='+pass)
+    await axios.post('http://127.0.0.1:4000/signup?email='+email+'&password='+pass, {
       email:email,
       password: pass
     })
   .then((response) => {
     if(response.statusCode == 201){
       console.log(response.statusCode)
-      window.location = './Dashboard.html'
+      window.location.replace('../dashboard.html');
     }
   }, (error) => {
     console.log(error);
