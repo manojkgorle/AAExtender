@@ -34,6 +34,7 @@
     })
   .then((response) => {
     if(response.statusCode == 201){
+      console.log(response.statusCode)
       window.location = './Dashboard.html'
     }
   }, (error) => {
