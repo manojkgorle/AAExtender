@@ -40,7 +40,7 @@ localhost:4000/signup?email=mnjkjjlsljklsglljkle@gm.com&password=122
 
 signin api 
 
-localhost:4000/signin?email=mnjglle@gm.com&password=122
+localhost:4000/signin?email=mnjkjjlsljklsglljkle@gm.com&password=122
 
 sendApi
 
@@ -67,7 +67,7 @@ localhost:5000/signup?email=mnjkjjlsljklsglljkle@gm.com&password=122
 
 signin api 
 
-localhost:5000/signin?email=mnjglle@gm.com&password=122
+localhost:5000/signin?email=mnjkjjlsljklsglljkle@gm.com&password=122
 
 sendApi
 
