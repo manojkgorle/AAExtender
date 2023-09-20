@@ -29,14 +29,14 @@
   btnLogin.onclick = function(){
       var email = document.getElementById('email').value;
       var pass = document.getElementById('password').value
-      
+
     axios.post('http://127.0.0.1:4000/signin?email='+email+'password='+password, {
       email:email,
       password: pass
   })
 .then((response) => {
   if(response.statusCode == 201){
-    window.location = './Dashboard.html'
+    window.location = 'localhost:3000/dashboard.html'
   }
 }, (error) => {
   console.log(error);

@@ -39,7 +39,7 @@
   .then((response) => {
     if(response.statusCode == 201){
       console.log(response.statusCode)
-      window.location.replace('../dashboard.html');
+      location.replace('localhost:3000/dashboard.html');
     }
   }, (error) => {
     console.log(error);
