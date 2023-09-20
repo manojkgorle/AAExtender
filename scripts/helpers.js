@@ -28,17 +28,17 @@ async function mainD() {
 }
 
 async function deployBoth() {
-    const entryPoint = await hre.ethers.deployContract("EntryPoint")
-    const entryPointAddress = entryPoint.target
-    console.log('===entrypoint addr=', entryPointAddress)
-    const simpleAccountFactory = await hre.ethers.deployContract("SimpleAccountFactory", [entryPointAddress])
-    const simpleAccountFactoryAddress = simpleAccountFactory.target
-    console.log('===simpleAccountFactory addr=', simpleAccountFactoryAddress)
-    const implementation = await simpleAccountFactory.accountImplementation()
-    console.log("===implementation=", implementation)
+    // const entryPoint = await hre.ethers.deployContract("EntryPoint")
+    // const entryPointAddress = entryPoint.target
+    // console.log('===entrypoint addr=', entryPointAddress)
+    // const simpleAccountFactory = await hre.ethers.deployContract("SimpleAccountFactory", [entryPointAddress])
+    // const simpleAccountFactoryAddress = simpleAccountFactory.target
+    // console.log('===simpleAccountFactory addr=', simpleAccountFactoryAddress)
+    // const implementation = await simpleAccountFactory.accountImplementation()
+    // console.log("===implementation=", implementation)
     const co = await hre.ethers.deployContract("TestCounter")
     console.log(co.target)
-    return [entryPointAddress, simpleAccountFactoryAddress, implementation]
+    // return [/*entryPointAddress, simpleAccountFactoryAddress,*/ implementation]
 }
 async function deployFactory(entryPointAddress) {
     const simpleAccountFactory = await hre.ethers.deployContract("SimpleAccountFactory", [entryPointAddress])
