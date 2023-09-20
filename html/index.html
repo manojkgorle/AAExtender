@@ -15,7 +15,7 @@
   <div class='form'>
     <form>
   <input type="text" placeholder='email' class='text' id='email' required><br>
-  <input type="password" placeholder='••••••••••••••' id='password' required><br>
+  <input type="password" placeholder='••••••••••••••' class="text" id='password' required><br>
   <a href="#" class='btn-login' id='do-login'>Signup</a>
     </form>
   </div>
@@ -25,9 +25,12 @@
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
   var btnLogin = document.getElementById('do-login');
-  var email = document.getElementById('email').value;
-  var pass = document.getElementById('password').value
+  
+  
   btnLogin.onclick = function(){
+    var email = document.getElementById('email').value;
+    var pass = document.getElementById('password').value;
+
     axios.post('http://127.0.0.1:4000/signup?email='+email+'&password='+pass, {
       email:email,
       password: pass
