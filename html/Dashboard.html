@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="dashboard.css">
+    <title>Dashboard</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Blocswap</h1>
+        <div class="input" id='sca'>
+
+        </div>
+        <div class="input" id="inc">
+            Increase Count
+        </div>
+        
+    </div>
+</body>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+    var sca = document.getElementById('sca');
+    axios.post('/pubkey',{})
+  .then((response) => {
+    sca.innerHtml = reponse.data
+    }, (error) => {
+    console.log(error);
+  });
+ var btnInc = document.getElementById('inc');
+  btnInc.onclick = function(){
+    axios.post('/sendapi', {
+    })
+  .then((response) => {
+    var balance
+    var count
+    if(response.statusCode == 201){
+        axios.post("/balance",{}).then((response)=>{
+            balance = response.data 
+        })
+        axios.post("/count",{}).then((resp)=>{
+            count = resp.data
+        })
+    }
+    sca.innerHtml = "SCA Bal:" + balance + "count:" count;
+  }, (error) => {
+    console.log(error);
+  });
+  }
+</script>
+</html>

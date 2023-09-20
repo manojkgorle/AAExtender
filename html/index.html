@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>BlockSign</title>
+  <link href="https://fonts.googleapis.com/css?family=Assistant:400,700" rel="stylesheet"><link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<section class='login' id='login'>
+  <div class='head'>
+  <h1 class='company'>BLOCSOC</h1>
+  </div>
+  <div class='form'>
+    <form>
+  <input type="text" placeholder='email' class='text' id='email' required><br>
+  <input type="password" placeholder='••••••••••••••' id='password' required><br>
+  <a href="#" class='btn-login' id='do-login'>Signup</a>
+    </form>
+  </div>
+</section>
+
+<!-- partial -->
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+  var btnLogin = document.getElementById('do-login');
+  var email = document.getElementById('email');
+  var pass = document.getElementById('password')
+  btnLogin.onclick = function(){
+    axios.post('/signup', {
+      email:email,
+      password: pass
+    })
+  .then((response) => {
+    if(response.statusCode == 201){
+      window.location = './Dashboard.html'
+    }
+  }, (error) => {
+    console.log(error);
+  });
+  }
+  </script>
+
+</body>
+</html>
