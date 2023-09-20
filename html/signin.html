@@ -29,7 +29,7 @@
   var email = document.getElementById('email');
   var pass = document.getElementById('password')
     btnLogin.onclick = function(){
-    axios.post('/signin', {
+    axios.post('localhost:4000/signin', {
       email:email,
       password: pass
   })

@@ -17,14 +17,22 @@
         <div class="input" id="inc">
             Increase Count
         </div>
-        
+
+    </div>
+    <div>
+        under the hood:
+            We deployed a programmable smart contract wallet,
+            you now interacted with one of the deployed contract counter with your smart conract wallet account.
+            The counter got increased.
+            Every time you try tho increase the counter, we are depositing 1eth in your smart contract wallet for gas fees(we did not implement dynamic gas, time is short)
+            making a tx from your wallet, you observe the count increasing by one & your balance & previousBlance will have a differnce by approx 1eth
     </div>
 </body>
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
     var sca = document.getElementById('sca');
-    axios.post('/pubkey',{})
+    axios.post('localhost:4000/pubkey',{})
   .then((response) => {
     sca.innerHtml = reponse.data
     }, (error) => {
@@ -32,16 +40,16 @@
   });
  var btnInc = document.getElementById('inc');
   btnInc.onclick = function(){
-    axios.post('/sendapi', {
+    axios.post('localhost:4000/sendapi', {
     })
   .then((response) => {
     var balance
     var count
     if(response.statusCode == 201){
-        axios.post("/balance",{}).then((response)=>{
+        axios.post("localhost:4000/balance",{}).then((response)=>{
             balance = response.data 
         })
-        axios.post("/count",{}).then((resp)=>{
+        axios.post("localhost:4000/count",{}).then((resp)=>{
             count = resp.data
         })
     }
