@@ -26,8 +26,8 @@
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
   var btnLogin = document.getElementById('do-login');
-  var email = document.getElementById('email');
-  var pass = document.getElementById('password')
+  var email = document.getElementById('email').value;
+  var pass = document.getElementById('password').value
     btnLogin.onclick = function(){
     axios.post('http://127.0.0.1:4000/signin?email='+email+'password='+password, {
       email:email,
