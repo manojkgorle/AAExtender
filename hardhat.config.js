@@ -28,7 +28,7 @@ module.exports = {
       'contracts/samples/SimpleAccount.sol': optimizedComilerSettings
     }
   },
-  defaultNetwork: "mumbai",
+  defaultNetwork: "proxy",
   networks: {
     hardhat: {
     },

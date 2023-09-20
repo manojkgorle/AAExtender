@@ -1,6 +1,6 @@
 # BlocSoc
 
-###### Descreption: smartAccount for users / programmable social recovarble smart account for users
+###### Description: smartAccount for users / programmable social recovarble smart account for users
 
 use linux or wsl2 if you are on windows
 install hardhat
