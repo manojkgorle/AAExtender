@@ -331,6 +331,7 @@ app.post("/pubkey", async (req, res) => {
     const cookies = req.signedCookies
     const privateKey = cookies['encrypted']
     const email = cookies['email']
+    var fileAddress = getFileName(email)
     fs.readFile(fileAddress, (err, data) => {
         if (err) {
             console.log(err)
