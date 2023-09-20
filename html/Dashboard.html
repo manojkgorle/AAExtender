@@ -32,7 +32,7 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
     var sca = document.getElementById('sca');
-    axios.post('localhost:4000/pubkey',{})
+    axios.post('http://127.0.0.1:4000/pubkey',{})
   .then((response) => {
     sca.innerHtml = reponse.data
     }, (error) => {
@@ -40,16 +40,16 @@
   });
  var btnInc = document.getElementById('inc');
   btnInc.onclick = function(){
-    axios.post('localhost:4000/sendapi', {
+    axios.post('http://127.0.0.1:4000/sendapi', {
     })
   .then((response) => {
     var balance
     var count
     if(response.statusCode == 201){
-        axios.post("localhost:4000/balance",{}).then((response)=>{
+        axios.post("http://127.0.0.1:4000/balance",{}).then((response)=>{
             balance = response.data 
         })
-        axios.post("localhost:4000/count",{}).then((resp)=>{
+        axios.post("http://127.0.0.1:4000/count",{}).then((resp)=>{
             count = resp.data
         })
     }
