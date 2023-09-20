@@ -13,7 +13,7 @@ const ethereumjsUtil = require("ethereumjs-util")
 const defaultAbicoder = hre.ethers.AbiCoder.defaultAbiCoder()
 const keccak256 = hre.ethers.keccak256
 const arrayify = hre.ethers.getBytes //ethers.arrayify in v5
-
+const cors = require("cors")
 async function getFactory(simpleAccountFactoryAddress) {
     return await hre.ethers.getContractAt("SimpleAccountFactory", simpleAccountFactoryAddress);
 }
@@ -164,7 +164,7 @@ function checkUser(data, email, password = null, isSignin = false) {
 const app = express();
 app.use(express.json())
 app.use(cookieParser("top secret")) //sign
-
+app.use(cors())
 //@todo signup
 app.post('/signup', (req, res) => {
     const email = req.query.email
