@@ -1,5 +1,5 @@
 //@todo actually as we are writing server, we need to use try catch methods for handling exceptions & let server not crash --> should addres in next updates, if any
-
+//@todo copy of app @ 24-09-23 at 21:00
 const express = require('express')
 const fs = require("fs")
 const cookieParser = require("cookie-parser")
@@ -34,9 +34,6 @@ async function initiateSmartAccount(simpleAccountFactoryAddress, owner, salt = 0
 }
 async function connectEntryPoint(entryPointAddress) {
     return await hre.ethers.getContractAt("EntryPoint", entryPointAddress)
-}
-async function connectPayMaster(payMasterAddress) {
-    return await hre.ethers.getContractAt("TestPaymasterAcceptAll", payMasterAddress)
 }
 function signUserOp(op, signer, entryPointAddress, chainId) {
     // @todo we need to pass a new signer w/ eoa s credentials or else pass the privatekey to sign 
@@ -73,17 +70,9 @@ async function sendTestEth(smartAccAddress, amountEth) {
     const [signer] = await hre.ethers.getSigners()
     await signer.sendTransaction({ to: smartAccAddress, value: hre.ethers.parseEther(amountEth) })
 }
-async function paymasterDeposit(entryPointAddress, payMasterInstance) {
-    await payMasterInstance.deposit({ value: hre.ethers.parseEther("10") })
-}
 function getPublicKeyFromPrivateKey(privateKey) {
     const wallet = new hre.ethers.Wallet(privateKey)
     return wallet.address
-}
-async function getInitCode(simpleAccountFactoryAddress, owner, salt = 0) {
-    const simpleAccountFactory = await hre.ethers.getContractAt("SimpleAccountFactory", simpleAccountFactoryAddress)
-    const tx = await simpleAccountFactory.createAccount.populateTransaction(owner, salt)
-    return simpleAccountFactoryAddress + tx.data.slice(2)
 }
 //--cryptography begin --
 function generateKeyPair(password) {
@@ -141,10 +130,10 @@ function addUserCred(email, password) {
         })
     })
 }
-function createUserFile(filename /**filename = email */, publicKey, encrytedPrivateKey, isInitated = false, smartAccAddress) {
+function createUserFile(filename /**filename = email */, publicKey, encrytedPrivateKeyprivateKey, isInitated = false, smartAccAddress) {
     var data = {
         "publicKey": publicKey,
-        "encryptedPrivateKey": encrytedPrivateKey,
+        "encryptedPrivateKey": encrytedPrivateKeyprivateKey,
         "isInitiated": isInitated,
         "smartAccAddress": smartAccAddress
     }
@@ -154,21 +143,6 @@ function createUserFile(filename /**filename = email */, publicKey, encrytedPriv
         if (err) throw err;
         console.log('Saved!');
     });
-}
-function updateUserFile(filename, publicKey, encryptedPrivateKey, isInitated = true, smartAccAddress) {
-    var data = {
-        "publicKey": publicKey,
-        "encryptedPrivateKey": encryptedPrivateKey,
-        "isInitiated": isInitated,
-        "smartAccAddress": smartAccAddress
-    }
-    data = JSON.stringify(data)
-    filename = getFileName(filename)
-
-    fs.writeFile(filename, data, function (err) {
-        if (err) throw err;
-        console.log("updated");
-    })
 }
 function getFileName(filename) {
     return './scripts/accountCred/' + filename + '.json'
@@ -299,29 +273,18 @@ app.post("/sendapi", (req, res) => {
             return
         }
         data = JSON.parse(data)
-        var publicKey, isInitated, smartAccAddress, entryPointAddress, nonce, simpleAccountFactoryAddress
+        var publicKey, isInitated, smartAccAddress, entryPointAddress, nonce
         publicKey = data['publicKey']
         isInitated = data['isInitiated']
         smartAccAddress = data['smartAccAddress']
         entryPointAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
-        simpleAccountFactoryAddress = "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512"
-        paymasterAddress = "0x0165878A594ca255338adfa4d48449f69242Eb8F" //@todo it is not a determnistic account, shall change on node restart
-        // await sendTestEth(smartAccAddress, '1')
+        await sendTestEth(smartAccAddress, '1')
         const entryPointInstance = await connectEntryPoint(entryPointAddress)
-        const payMasterInstance = await connectPayMaster(paymasterAddress)
-        const payMasterDeposits = await entryPointInstance.getDepositInfo(paymasterAddress)
-
-        if (payMasterDeposits[0] == hre.ethers.parseEther("0")) {
-            await paymasterDeposit(entryPointAddress, payMasterInstance)
-            console.log("depositing to paymaster")
-        }
         nonce = await entryPointInstance.getNonce(smartAccAddress, 0)
         var chainId = 31337
-        var initCode = '0x'
         console.log(isInitated, !isInitated, isInitated == false)
         if (!isInitated) {
-            // await initiateSmartAccount("0xe7f1725e7734ce288f8367e1bb143e90bb3f0512", publicKey) // there are better alternatives to do, as compiling init code & sending with user Op, but this can be explored on later updates, if any
-            var initCode = await getInitCode(simpleAccountFactoryAddress, publicKey)
+            await initiateSmartAccount("0xe7f1725e7734ce288f8367e1bb143e90bb3f0512", publicKey) // there are better alternatives to do, as compiling init code & sending with user Op, but this can be explored on later updates, if any
         }
         const testCounter = await hre.ethers.getContractAt("TestCounter", "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0")
         const count = await testCounter.count.populateTransaction()
@@ -332,14 +295,14 @@ app.post("/sendapi", (req, res) => {
         var userOp = {
             sender: smartAccAddress,//should write a function to handle initcode & sender
             nonce: nonce,
-            initCode: initCode, //@todo --> need to write the function
+            initCode: '0x', //@todo --> need to write the function
             callData: acc.data,//acc.data, //@todo --> need to write the function
             callGasLimit: '0x' + 10e5.toString(16), //should calculate this
             verificationGasLimit: '0x' + 10e5.toString(16),
             preVerificationGas: '0x' + 10e5.toString(16),
             maxFeePerGas: 1,
             maxPriorityFeePerGas: 1,
-            paymasterAndData: paymasterAddress,
+            paymasterAndData: '0x',
             signature: "0x"
         }
 
@@ -347,9 +310,6 @@ app.post("/sendapi", (req, res) => {
         console.log(signedOp)
         const test = await entryPointInstance.handleOps([signedOp], "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266")
         console.log(test)
-        if (test == true && isInitated == false) {
-            updateUserFile(email, publicKey, encryptPrivateKey, true, smartAccAddress)
-        }
         res.send()
     })
 })

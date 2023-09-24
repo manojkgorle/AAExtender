@@ -56,6 +56,7 @@ async function getAccountAddress(simpleAccountFactoryAddress, ownerAddress, salt
     const simpleAccountFactory = await hre.ethers.getContractAt("SimpleAccountFactory", simpleAccountFactoryAddress)
     const newAccountAddress = await simpleAccountFactory.getAddress2(ownerAddress, salt)
     console.log("===newAccount address=", newAccountAddress)
+    return newAccountAddress
 }
 async function connectEntryPoint(entryPointAddress) {
     return await hre.ethers.getContractAt("EntryPoint", entryPointAddress)
@@ -152,7 +153,52 @@ async function test() {
     const test = await entryPointInstance.handleOps([signedOp], "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266")
     console.log(test) //we are failing at validate prepayment
 }
+async function deployPaymaster() {
+    const payMaster = await hre.ethers.deployContract("TestPaymasterAcceptAll", ["0x5FbDB2315678afecb367f032d93F642f64180aa3"]);
+    console.log(payMaster.target)
+}
+async function getInitCode(factoryAddress, accountAddress) {
+    const simpleAccountFactory = await hre.ethers.getContractAt("SimpleAccountFactory", factoryAddress)
+    const tx = await simpleAccountFactory.createAccount.populateTransaction(accountAddress, 0)
+    console.log(tx.data)
+    return tx.data.slice(2)
 
+}
+async function deployWithInitCode(accountAddress = "0xdD2FD4581271e230360230F9337D5c0430Bf44C0") {
+    var entryPointAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+    var simpleAccountFactoryAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
+
+    var chainId = 31337
+
+    var sender = await getAccountAddress(simpleAccountFactoryAddress, accountAddress, 0)
+
+    var entryPointInstance = await hre.ethers.getContractAt("EntryPoint", entryPointAddress)
+
+    await sendTestEth(sender, "1")
+
+    var nonce = await entryPointInstance.getNonce(sender, 0)
+    var payLoad = await getInitCode(simpleAccountFactoryAddress, accountAddress)
+    var initCode = simpleAccountFactoryAddress + payLoad
+    console.log(initCode)
+    const userOp = {
+        sender: sender,//should write a function to handle initcode & sender
+        nonce: nonce,
+        initCode: '0x', //@todo --> need to write the function
+        callData: '0x', //@todo --> need to write the function
+        callGasLimit: '0x' + 10e5.toString(16),
+        verificationGasLimit: '0x' + 10e5.toString(16),
+        preVerificationGas: '0x' + 10e5.toString(16),
+        maxFeePerGas: 1,
+        maxPriorityFeePerGas: 1,
+        paymasterAndData: '0x',
+        signature: '0x' //@todo --> write a function to sign data
+    }
+    signedOp = signUserOp(userOp, { privateKey: "0xde9be858da4a475276426320d5e9262ecfc3ba460bfac56360bfa6c4c28b4ee0" }, entryPointAddress, chainId)
+
+    const test = await entryPointInstance.handleOps([signedOp], "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266")
+    console.log(test) //we are failing at validate prepayment
+
+}
 // ===entrypoint addr= 0x5FbDB2315678afecb367f032d93F642f64180aa3
 // ===simpleAccountFactory addr= 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512
 // ===implementation= 0xCafac3dD18aC6c6e92c921884f9E4176737C052c
@@ -172,4 +218,15 @@ async function deployCounter() {
 
     // await createNewAccount("0xe7f1725e7734ce288f8367e1bb143e90bb3f0512", "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266", 0)
 }
-deployBoth()
+
+// deployBoth()
+deployPaymaster()
+// deployWithInitCode()
+// test()
+async function main() {
+    const entryPointInstance = await connectEntryPoint("0x5FbDB2315678afecb367f032d93F642f64180aa3")
+    const tx = await entryPointInstance.getDepositInfo("0x0165878A594ca255338adfa4d48449f69242Eb8F")
+    console.log(tx)
+}
+//@todo temp paymast addr 0x0165878A594ca255338adfa4d48449f69242Eb8F
+main()
