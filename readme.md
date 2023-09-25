@@ -1,7 +1,7 @@
-# BlocSoc
+# AA Extender
 
 ###### Description: smartAccount for users / programmable social recovarble smart account for users
-
+note: work in progress, basic verison to create & send userOp
 use linux or wsl2 if you are on windows
 install hardhat
 
